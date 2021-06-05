@@ -212,15 +212,23 @@ export default class WheelController {
         const guess = req.body.guess
         const playerNum = req.body.playerNum
         let correct = false;
-        if(guess.toLowerCase() === guess.toLowerCase()){
+        let nextPlayer = playerNum;
+        if(guess.toLowerCase() === phrase.toLowerCase()){
             correct = true;
             puzzle = phrase;
             winner = playerNum;
+        } else {
+            nextPlayer++;
+            if(nextPlayer > numPlayers){
+                nextPlayer = 1;
+            } 
         }
         console.log('winner: ' + winner)
+        currentPlayer = ''+nextPlayer;
         let response= {
             correctGuess: correct,
-            winner: winner
+            winner: winner,
+            currentPlayer: currentPlayer
         };
         res.json(response);
     }

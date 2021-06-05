@@ -106,6 +106,7 @@ const Player = props => {
                 setSpinLabel('Correct.  You Win!')
             } else {
                 setSpinLabel('Incorrect.')
+                props.setCurrentPlayer(response.data.currentPlayer)
             }
         });
         setPhraseGuess('')
