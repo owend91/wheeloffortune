@@ -14,6 +14,7 @@ let winner = ''
 export default class WheelController {
 
     static async apiGetStatus(req, res, next){
+        console.log('get status')
         // puzzle = createPuzzle(correctLetters) 
         let response= {
             category: category,

@@ -119,3 +119,4 @@ dist
 .netlify
 
 *.DS_STORE
+*frontend/build
