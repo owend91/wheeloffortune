@@ -5,7 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Host from './components/host'
 import Players from './components/player'
 import GameBoard from './components/gameBoard'
-import Actions from './helpers/actions'
 
 import WheelDataService from "./services/wheel"
 
