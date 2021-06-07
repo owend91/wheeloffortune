@@ -102,7 +102,7 @@ const Player = props => {
         WheelDataService.guessPhrase(data)
         .then( response => {
             if(response.data.correctGuess){
-                setSpinLabel('Correct.  You Win!')
+                setSpinLabel('Correct.  You win the round!')
             } else {
                 setSpinLabel('Incorrect.')
                 props.setCurrentPlayer(response.data.currentPlayer)
@@ -148,7 +148,7 @@ const Player = props => {
                 props.winner === '' ? (
                     <h4 className='card-title' style={{textAlign:'center'}}>Player {props.currentPlayer} Turn</h4>
                 ) : (
-                    <h4 className='card-title' style={{textAlign:'center'}}>Player {props.winner} Wins!</h4>
+                    <h4 className='card-title' style={{textAlign:'center'}}>Player {props.winner} Is Correct!</h4>
                 )
             }
             </div>

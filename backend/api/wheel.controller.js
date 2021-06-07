@@ -14,6 +14,9 @@ let gameStarted = false;
 let currentPlayer = ''
 let puzzle = ''
 let winner = ''
+let totalPlayerScores = {};
+let wentFirstLastRound = '';
+
 
 mongoose.connect(process.env.MONGO_URL, {
     useUnifiedTopology: true,
@@ -46,7 +49,7 @@ export default class WheelController {
     }
 
     static async apiGetStatus(req, res, next){
-        // console.log('get status')
+        console.log('get status')
         // puzzle = createPuzzle(correctLetters) 
         let response= {
             category: category,
@@ -59,8 +62,10 @@ export default class WheelController {
             allLetters: allLetters,
             currentPlayer: currentPlayer,
             puzzle: puzzle,
-            winner: winner
+            winner: winner,
+            totalPlayerScores: totalPlayerScores
         };
+        console.log(response)
         res.json(response);
     }
 
@@ -70,11 +75,13 @@ export default class WheelController {
         phrase = req.body.phrase;
         numPlayers = req.body.numPlayers;
         playerScores = req.body.players;
+        totalPlayerScores = req.body.totalPlayers
         gameStarted = true;
         incorrectLetters = []
         correctLetters = []
         allLetters = []
         currentPlayer = "1"
+        wentFirstLastRound = "1"
         winner = '';
         puzzle = createPuzzle(correctLetters);
         console.log(`category: ${category}   phrase: ${phrase}   numPlayers: ${req.body.numPlayers}`)
@@ -82,11 +89,47 @@ export default class WheelController {
         res.json({ status: "success" });
     }
 
-    static async apiPostResetPuzzle(req, res, next){
+    static async apiPostNextRoundPuzzle(req, res, next){
+        console.log(req.body)
+        category = req.body.category
+        phrase = req.body.phrase;
+        playerScores = req.body.players;
+        incorrectLetters = []
+        correctLetters = []
+        allLetters = []
+        winner = '';
+        puzzle = createPuzzle(correctLetters);
+        console.log(`category: ${category}   phrase: ${phrase}   numPlayers: ${req.body.numPlayers}`)
+        console.log('Players: ', playerScores)
+        res.json({ status: "success" });
+    }
+
+    static async apiPostPrepareNextRound(req, res, next){
+        console.log("next round!")
+        totalPlayerScores[winner] += playerScores[winner]
+        incorrectLetters = []
+        correctLetters = []
+        allLetters = []
+        let nextPlayer = parseInt(wentFirstLastRound) +1;
+        if(nextPlayer > numPlayers){
+            nextPlayer = 1;
+        }
+        currentPlayer = '' + nextPlayer
+        wentFirstLastRound = currentPlayer
+        let response= {
+            totalPlayerScores: totalPlayerScores
+        }
+        // console.log(`category: ${category}   phrase: ${phrase}   numPlayers: ${req.body.numPlayers}`)
+        // console.log('Players: ', playerScores)
+        res.json({ status: "success" });
+    }
+
+    static async apiPostResetGame(req, res, next){
         category = ""
         phrase = ""
         numPlayers = 0;
         playerScores = {}
+        totalPlayerScores = {}
         gameStarted = false;
         incorrectLetters = []
         correctLetters = []

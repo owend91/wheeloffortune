@@ -10,6 +10,8 @@ import WheelDataService from "./services/wheel"
 
 function App() {
   const [playerPoints, setPlayerPoints] = useState({})
+  const [totalPlayerPoints, setTotalPlayerPoints] = useState({})
+
   const [numPlayers, setNumPlayers] = useState(0)
   const [phrase, setPhrase] = useState('')
   const [category, setCategory] = useState('')
@@ -29,7 +31,9 @@ function App() {
     
     WheelDataService.getGameStatus()
     .then( response => {
+      console.log(response.data);
       setPlayerPoints(response.data.playerScores)
+      setTotalPlayerPoints(response.data.totalPlayerScores)
       setGameStarted(response.data.gameStarted)
       setCorrectLetters(response.data.correctLetters)
       setIncorrectLetters(response.data.incorrectLetters)
@@ -48,10 +52,12 @@ function App() {
     WheelDataService.getGameStatus()
     .then( response => {
       // console.log('currentPlayer: ' + response.data.currentPlayer)
+      console.log(response.data);
       setNumPlayers(parseInt(response.data.numPlayers));
       setPhrase(response.data.phrase)
       setCategory(response.data.category)
       setPlayerPoints(response.data.playerScores)
+      setTotalPlayerPoints(response.data.totalPlayerScores)
       setGameStarted(response.data.gameStarted)
       setCorrectLetters(response.data.correctLetters)
       setIncorrectLetters(response.data.incorrectLetters)
@@ -125,6 +131,7 @@ function App() {
                 setNumPlayers={setNumPlayers}
                 setResetClicked={setSubmitToServerClicked}
                 apiHit={submitToServer}
+                setTotalPlayerPoints={setTotalPlayerPoints}
               />
             )}
           />
@@ -157,6 +164,7 @@ function App() {
         allLetters={allLetters}
         setApiHit={setSubmitToServerClicked}
         apiHit={submitToServer}
+        totalPlayerPoints={totalPlayerPoints}
       />
       
     </div>

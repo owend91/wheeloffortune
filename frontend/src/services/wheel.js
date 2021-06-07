@@ -10,8 +10,16 @@ class WheelDataService {
         return http.get(`/getnewpuzzle`)
     }
 
+    prepareNextRound(){
+        return http.post(`/preparenextround`)
+    }
+
+    nextRoundPuzzle(data){
+        return http.post(`/nextroundpuzzle`, data)
+    }
+
     resetGame(){
-        return http.post(`/resetpuzzle`)
+        return http.post(`/resetgame`)
     }
 
     updateScore(data) {

@@ -25,10 +25,20 @@ const GameBoard = props => {
                     </div>
                     
                     <div className="card-body">
+                        <h6 className="card-body">This Round</h6>
                         <ul class="list-group list-group-flush">
                             {Object.keys(props.playerPoints).map( key => {
                                 return (
                                     <li class="list-group-item">Player {key}: {props.playerPoints[key]}</li>
+                                )}
+                            )}
+                        </ul>
+                        <br />
+                        <h6 className="card-body">Totals</h6>
+                        <ul class="list-group list-group-flush">
+                            {Object.keys(props.totalPlayerPoints).map( key => {
+                                return (
+                                    <li class="list-group-item">Player {key}: {props.totalPlayerPoints[key]}</li>
                                 )}
                             )}
                         </ul>

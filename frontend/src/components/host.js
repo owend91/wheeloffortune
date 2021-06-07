@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
+
 import WheelDataService from "../services/wheel"
 
 
 
 
 const Host = props => {
+
+    const [nextRound, setNextRound] = useState(false)
+
     function handleCategoryChange (event){
        props.setCategory(event.target.value)
     }
@@ -16,28 +20,45 @@ const Host = props => {
     }
     function startGame(event){
         const players = {}
+        const totalPlayers = {}
         let i = 1;
         while (i <= props.numPlayers){
             players[i] = 0
+            totalPlayers[i] = 0
             i++;
         }
         let data = {
             category: props.category,
             phrase: props.phrase,
             numPlayers: props.numPlayers,
-            players: players
+            players: players,
+            totalPlayers: totalPlayers
+
         }
-        WheelDataService.createGame(data)
-        .then( () =>{
-          props.setResetClicked(!props.apiHit);
-        });
+        if(nextRound){
+          WheelDataService.nextRoundPuzzle(data)
+          .then( (response) =>{
+            // props.setPhrase(phrase)
+            props.setResetClicked(!props.apiHit);
+            props.setTotalPlayerPoints(response.data.setTotalPlayerScores)
+            setNextRound(false)
+          });
+        } else {
+          WheelDataService.createGame(data)
+          .then( () =>{
+            // props.setPhrase(phrase)
+            props.setResetClicked(!props.apiHit);
+          });
+        }
         
     }
     function generatePuzzle(event){
       const players = {}
+      const totalPlayers = {}
       let i = 1;
       while (i <= props.numPlayers){
           players[i] = 0
+          totalPlayers[i] = 0
           i++;
       }
       WheelDataService.getPuzzle()
@@ -50,13 +71,24 @@ const Host = props => {
           category: category,
           phrase: phrase,
           numPlayers: props.numPlayers,
-          players: players
+          players: players,
+          totalPlayers: totalPlayers
         }
-        WheelDataService.createGame(data)
-        .then( () =>{
-          // props.setPhrase(phrase)
-          props.setResetClicked(!props.apiHit);
-        });
+        if(nextRound){
+          WheelDataService.nextRoundPuzzle(data)
+          .then( () =>{
+            // props.setPhrase(phrase)
+            props.setResetClicked(!props.apiHit);
+            setNextRound(false)
+          });
+        } else {
+          WheelDataService.createGame(data)
+          .then( () =>{
+            // props.setPhrase(phrase)
+            props.setResetClicked(!props.apiHit);
+          });
+        }
+        
       });
       
   }
@@ -64,12 +96,26 @@ const Host = props => {
       WheelDataService.resetGame();
       props.setResetClicked(!props.apiHit);
     }
+    function nextRoundClick(event){
+      WheelDataService.prepareNextRound()
+      .then( () =>{
+        setNextRound(true)
+        props.setCategory('');
+        props.setPhrase('');
+      });
+
+
+    }
     return (
         <div>
             <h1>{props.gameStarted ? 'Game Started!' : 'Enter a category and phrase or generate a random puzzle!'}</h1>
             {
                 props.gameStarted ? (
+                  <div>
+                    <button className='btn btn-outline-success' onClick={nextRoundClick}>Next Round</button>
                     <button className='btn btn-outline-danger' onClick={resetGame}>Reset Game</button>
+
+                  </div>
                 ) : null
             }
             <div>
@@ -84,7 +130,7 @@ const Host = props => {
                   onChange={handleCategoryChange}
                   name="category"
                   placeholder="Category"
-                  readOnly={props.gameStarted}
+                  readOnly={props.gameStarted && !nextRound}
                 />
               </div>
               <div className="form-group">
@@ -98,7 +144,7 @@ const Host = props => {
                   onChange={handlePhraseChange}
                   name="phrase"
                   placeholder="Phrase"
-                  hidden={props.gameStarted}
+                  hidden={props.gameStarted && !nextRound}
                 />
               </div>
               <div className="form-group pb-1">
@@ -115,15 +161,15 @@ const Host = props => {
                   readOnly={props.gameStarted}
                 />
               </div>
-              {!props.gameStarted ? (
+              {!props.gameStarted || nextRound ? (
                 <div className='row pb-1'>
                   <div className='col-2'>
-                    <button readOnly={props.gameStarted} onClick={startGame} className="btn btn-success">
+                    <button readOnly={props.gameStarted && !nextRound} onClick={startGame} className="btn btn-success">
                         Create Custom Game
                     </button>
                   </div>
                   <div className='col-2'>
-                    <button readOnly={props.gameStarted} onClick={generatePuzzle} className="btn btn-warning">
+                    <button readOnly={props.gameStarted && !nextRound} onClick={generatePuzzle} className="btn btn-warning">
                       Generate Puzzle
                     </button>
                   </div>
