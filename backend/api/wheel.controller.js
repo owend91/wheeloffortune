@@ -1,4 +1,7 @@
-// import Action from '../helpers/actions.js'
+import mongoose from 'mongoose';
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 let category = "";
 let phrase = "";
@@ -11,10 +14,39 @@ let gameStarted = false;
 let currentPlayer = ''
 let puzzle = ''
 let winner = ''
+
+mongoose.connect(process.env.MONGO_URL, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+  });
+
+  const puzzleSchema = new mongoose.Schema({
+    category: String,
+    puzzle: String,
+  });
+  const WheelPuzzle = new mongoose.model("WheelPuzzle", puzzleSchema);
+
 export default class WheelController {
 
+
+    static async apiGetPuzzle(req, res, next){
+        console.log('get puzzle')
+        // puzzle = createPuzzle(correctLetters) 
+        WheelPuzzle.countDocuments((err, count) => {
+            var random = Math.floor(Math.random() * count)
+            WheelPuzzle.findOne().skip(random).exec((err, obj) => {
+                console.log(obj)
+                let response= {
+                    category: obj.category,
+                    puzzle: obj.puzzle
+                };
+                res.json(response);
+            })
+        })   
+    }
+
     static async apiGetStatus(req, res, next){
-        console.log('get status')
+        // console.log('get status')
         // puzzle = createPuzzle(correctLetters) 
         let response= {
             category: category,
@@ -238,7 +270,7 @@ export default class WheelController {
 function createPuzzle(correctLetters) {
     let puzzle = '';
     for(const c of phrase){
-        if(correctLetters.includes(c.toLowerCase()) || c === '-' || c === '&'){
+        if(correctLetters.includes(c.toLowerCase()) || c === '-' || c === '&' || c === '\''){
             puzzle += c
         } else if(c === ' ') {
             console.log('space')

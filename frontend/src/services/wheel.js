@@ -5,6 +5,10 @@ class WheelDataService {
     createGame(data){
         return http.post(`/newpuzzle`, data)
     }
+    
+    getPuzzle(data){
+        return http.get(`/getnewpuzzle`)
+    }
 
     resetGame(){
         return http.post(`/resetpuzzle`)

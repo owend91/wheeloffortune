@@ -16,7 +16,6 @@ const Host = props => {
         props.setNumPlayers(event.target.value)
     }
     function startGame(event){
-        console.log(`numPlayers: ${props.numPlayers}`)
         const players = {}
         let i = 1;
         while (i <= props.numPlayers){
@@ -35,13 +34,41 @@ const Host = props => {
         });
         
     }
+    function generatePuzzle(event){
+      const players = {}
+      let i = 1;
+      while (i <= props.numPlayers){
+          players[i] = 0
+          i++;
+      }
+      WheelDataService.getPuzzle()
+      .then( (response) => {
+        const category = response.data.category
+        const phrase = response.data.puzzle
+        props.setCategory(category)
+        props.setPhrase(phrase)
+        let data = {
+          category: category,
+          phrase: phrase,
+          numPlayers: props.numPlayers,
+          players: players
+        }
+        console.log(category);
+        console.log(phrase);
+        WheelDataService.createGame(data)
+        .then( () =>{
+          props.setResetClicked(!props.apiHit);
+        });
+      });
+      
+  }
     function resetGame(event){
       WheelDataService.resetGame();
       props.setResetClicked(!props.apiHit);
     }
     return (
         <div>
-            <h1>{props.gameStarted ? 'Game Started!' : 'Enter a category and phrase!'}</h1>
+            <h1>{props.gameStarted ? 'Game Started!' : 'Enter a category and phrase or generate a random puzzle!'}</h1>
             {
                 props.gameStarted ? (
                     <button className='btn btn-outline-danger' onClick={resetGame}>Reset Game</button>
@@ -91,10 +118,20 @@ const Host = props => {
                 />
               </div>
               {!props.gameStarted ? (
-                <button readOnly={props.gameStarted} onClick={startGame} className="btn btn-success">
-                    Submit
-                </button>
+                <div className='row pb-1'>
+                  <div className='col-2'>
+                    <button readOnly={props.gameStarted} onClick={startGame} className="btn btn-success">
+                        Create Custom Game
+                    </button>
+                  </div>
+                  <div className='col-2'>
+                    <button readOnly={props.gameStarted} onClick={generatePuzzle} className="btn btn-warning">
+                      Generate Puzzle
+                    </button>
+                  </div>
+                </div>
               ) : null}
+              
               
             </div>
         </div>

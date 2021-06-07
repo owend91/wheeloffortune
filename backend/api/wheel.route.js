@@ -4,6 +4,7 @@ import WheelCtrl from './wheel.controller.js';
 const router = express.Router();
 
 router.route("/getStatus").get(WheelCtrl.apiGetStatus);
+router.route("/getnewpuzzle").get(WheelCtrl.apiGetPuzzle);
 router.route("/newpuzzle").post(WheelCtrl.apiPostNewPuzzle);
 router.route("/resetpuzzle").post(WheelCtrl.apiPostResetPuzzle);
 router.route("/updateScore").post(WheelCtrl.apiPostUpdateScore);
