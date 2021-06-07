@@ -2,12 +2,12 @@ This project is a webapp to play a game of Wheel of Fortune.  The frontend is a 
 
 After cloning the project, create a .env in each folder.
 In the backend folder's .env, include:
-PORT=<port number to run the backend locally>
-MONGO_URL=<URL for the mongodb.  either local or atlas>
+PORT=[port number to run the backend locally]
+MONGO_URL=[URL for the mongodb.  either local or atlas]
 In the frontend folder's .env, include:
-REACT_APP_API_BASE=<the localhost link to the backend followed by /api/v1/wheel.  The default port is 5000 ie. http://localhost:5000/api/v1/wheel>
+REACT_APP_API_BASE=[the localhost link to the backend followed by /api/v1/wheel.  The default port is 5000 ie. http://localhost:5000/api/v1/wheel ]
 In the scraper folder's .env, include:
-MONGO_URL=<Same as the the property in the backend .env>
+MONGO_URL=[Same as the the property in the backend .env]
 
 From the terminal:
 Run 'npm install' for each folder to download dependencies, the run 'node index' from the scraper folder to populate your database.  In the backend folder, run 'nodemon index' and in the frontend folder run 'npm start'
