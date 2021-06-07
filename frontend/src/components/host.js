@@ -44,8 +44,8 @@ const Host = props => {
       .then( (response) => {
         const category = response.data.category
         const phrase = response.data.puzzle
-        props.setCategory(category)
-        props.setPhrase(phrase)
+        // props.setCategory(category)
+        
         let data = {
           category: category,
           phrase: phrase,
@@ -54,6 +54,7 @@ const Host = props => {
         }
         WheelDataService.createGame(data)
         .then( () =>{
+          // props.setPhrase(phrase)
           props.setResetClicked(!props.apiHit);
         });
       });
