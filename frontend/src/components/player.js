@@ -22,7 +22,6 @@ const Player = props => {
     }
     function buyVowel() {
         const guess = vowel.toLowerCase();
-        console.log('buy vowel: ', guess)
 
         if(!vowels.includes(guess)){
             setSpinLabel("You tried to buy a consenant.  You must guess for it!")
@@ -114,7 +113,6 @@ const Player = props => {
     function spinWheel(){
         const spinVal = Actions.spinWheel();
         if(spinVal === 'Bankrupt') {
-            console.log('Bankrupt!')
             const data = {
                 playerNum: playerNum,
                 amount: 0
@@ -126,7 +124,6 @@ const Player = props => {
                 props.setCurrentPlayer(response.data.currentPlayer)
             });
         } else if (spinVal === 'Lose a Turn'){
-            console.log('Lose a Turn')
             const data = {
                 playerNum: playerNum,
                 amount: props.playerPoints[playerNum]

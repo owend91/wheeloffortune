@@ -30,7 +30,7 @@ export default class WheelController {
 
 
     static async apiGetPuzzle(req, res, next){
-        console.log('get puzzle')
+        // console.log('get puzzle')
         // puzzle = createPuzzle(correctLetters) 
         WheelPuzzle.countDocuments((err, count) => {
             var random = Math.floor(Math.random() * count)

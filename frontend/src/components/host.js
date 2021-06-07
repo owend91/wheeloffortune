@@ -6,7 +6,6 @@ import WheelDataService from "../services/wheel"
 
 const Host = props => {
     function handleCategoryChange (event){
-      console.log(`category: ${event.target.value}`)
        props.setCategory(event.target.value)
     }
     function handlePhraseChange (event){
@@ -53,8 +52,6 @@ const Host = props => {
           numPlayers: props.numPlayers,
           players: players
         }
-        console.log(category);
-        console.log(phrase);
         WheelDataService.createGame(data)
         .then( () =>{
           props.setResetClicked(!props.apiHit);
