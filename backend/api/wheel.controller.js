@@ -130,10 +130,11 @@ export default class WheelController {
         const spinVal = req.body.amount
         const playerNum = req.body.playerNum
         let correct = false;
-        const alreadyGuessed = false;
+        let alreadyGuessed = false;
         let nextPlayer = playerNum;
 
         if(phrase.toLowerCase().includes(guess)){
+            // console.log(`guess: ${guess}   correctLetters: `, correctLetters);
             if(!correctLetters.includes(guess)){
                 let count = 0;
                 for(const c of phrase){
@@ -155,9 +156,11 @@ export default class WheelController {
                 console.log(`total score: ${playerScores[playerNum]}`)
              } else {
                 alreadyGuessed = true;
-                nextPlayer++;
-                if(nextPlayer > numPlayers){
-                    nextPlayer = 1;
+                if(spinVal !== 'Free Play'){
+                    nextPlayer++;
+                    if(nextPlayer > numPlayers){
+                        nextPlayer = 1;
+                    }
                 }
              }
         } else {
@@ -167,10 +170,12 @@ export default class WheelController {
             } else {
                 alreadyGuessed = true;
             } 
-            nextPlayer++;
-            if(nextPlayer > numPlayers){
-                nextPlayer = 1;
-            } 
+            if(spinVal !== 'Free Play'){
+                nextPlayer++;
+                if(nextPlayer > numPlayers){
+                    nextPlayer = 1;
+                } 
+            }
         }
         let response= {
             correctGuess: correct,
